@@ -10,15 +10,12 @@ from keras.src.utils import to_categorical
 from sklearn.metrics import *
 
 
-def prepare_data(file_path):
-    cols = ["sepal length", "sepal width", "petal length", "petal width", "iris type"]
-    data_file = pd.read_csv(file_path, names=cols, header=None)
-    for wiersz in data_file:
-        ostatnia_wartosc = wiersz[-1]
-        print(ostatnia_wartosc)
-    mapping = {'Iris-setosa': 0, 'Iris-versicolor': 1, 'Iris-virginica': 2}
-    data_file['iris type'] = data_file['iris type'].replace(mapping).infer_objects(copy=False)
-    return data_file
+def prepare_type_list(y_pred):
+    max_indices = []
+    for row in y_pred:
+        max_index = row.argmax()
+        max_indices.append(max_index+1)
+    return max_indices
 
 
 def oversample_set(data_set, oversample=False):
@@ -34,6 +31,7 @@ def oversample_set(data_set, oversample=False):
 
     connected = np.hstack((x, np.reshape(y, (-1, 1))))
     return connected, x, y
+
 
 def plot_loss(history):
     plt.plot(history.history['loss'], label='loss')

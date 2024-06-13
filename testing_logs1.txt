@@ -1,0 +1,22 @@
+WIELKOSCI Z CZESCI TESTOWEJ
+
+Raport
+              precision    recall  f1-score   support
+
+           0       0.89      0.89      0.89      2509
+           1       0.78      0.79      0.79      1295
+
+    accuracy                           0.85      3804
+   macro avg       0.84      0.84      0.84      3804
+weighted avg       0.85      0.85      0.85      3804
+
+Macierz pomylek
+[[2227  282]
+ [ 271 1024]]
+
+Blad dla calego wzorca
+0.13748686
+
+Lista bledow na poszczegolnych wyjsciach 
+0.10561976883220406
+0.19922779922779923

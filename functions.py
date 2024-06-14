@@ -10,12 +10,15 @@ from keras.src.utils import to_categorical
 from sklearn.metrics import *
 
 
-def prepare_type_list(y_pred):
-    max_indices = []
-    for row in y_pred:
-        max_index = row.argmax()
-        max_indices.append(max_index+1)
-    return max_indices
+def prepare_data(file_path):
+    cols = ["sepal length", "sepal width", "petal length", "petal width", "iris type"]
+    data_file = pd.read_csv(file_path, names=cols, header=None)
+    for wiersz in data_file:
+        ostatnia_wartosc = wiersz[-1]
+        print(ostatnia_wartosc)
+    mapping = {'Iris-setosa': 0, 'Iris-versicolor': 1, 'Iris-virginica': 2}
+    data_file['iris type'] = data_file['iris type'].replace(mapping).infer_objects(copy=False)
+    return data_file
 
 
 def oversample_set(data_set, oversample=False):
@@ -112,7 +115,6 @@ def test_logs(global_error, indiv_error, report, conf_matrix, filename):
             plik.write(f"{element}\n")
 
 
-
 def result_logs(y_test, y_pred, indiv_correct, correct, filename):
     with open(filename, 'w') as plik:
         plik.write("POROWNANIE WYNIKOW\nLiczba poprawnie sklasyfikowanych elementow:\n")
@@ -123,4 +125,3 @@ def result_logs(y_test, y_pred, indiv_correct, correct, filename):
         plik.write("Wyniki testowe - Wyniki przewidywane\n")
         for test, pred in zip(y_test, y_pred):
             plik.write(f"{test} - {pred}\n")
-

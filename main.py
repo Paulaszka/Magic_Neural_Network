@@ -1,13 +1,19 @@
+from sklearn.svm import SVC
+import tensorflow as tf
+import pandas as pd
+from sklearn.metrics import *
 from functions import *
 
 # - - - DATA PREPARATION - - -
 
-df = pd.read_csv('magic04.data')
+data = pd.read_csv('magic04.data')
 
 mapping = {'g': 0, 'h': 1}
-df = df.replace(mapping).infer_objects(copy=False)
+data = data.replace(mapping).infer_objects(copy=False)
 
-train, test = np.split(df.sample(frac=1), [int(0.7 * len(df))])
+# caly zbior danych liczy 19020 instancji, czesc treningowa 13314, a czesc testowa 5706
+
+train, test = np.split(data.sample(frac=1), [int(0.7 * len(data))])
 
 train, x_train, y_train = oversample_set(train, True)
 test, x_test, y_test = oversample_set(test)
@@ -27,13 +33,16 @@ nn_model = tf.keras.Sequential([
     tf.keras.layers.Dense(1, activation='sigmoid')
 ])
 
-nn_model.compile(optimizer=tf.keras.optimizers.Adam(learning_rate=0.01), loss='binary_crossentropy', metrics=['accuracy'])
+nn_model.compile(optimizer=tf.keras.optimizers.Adam(learning_rate=0.01),
+                 loss='binary_crossentropy', metrics=['accuracy'])
 
-history = nn_model.fit(x_train, y_train, epochs=700, batch_size=951, verbose=1)
+history = nn_model.fit(x_train, y_train, epochs=600, batch_size=951, verbose=1)
 
 y_pred2 = nn_model.predict(x_test)
 
-plot_loss(history)
+# plot_loss(history)
+
+# - - - RAPORT CALCULATIONS - - -
 
 types_list = []
 for i in y_test:
@@ -50,18 +59,12 @@ for i in range(len(y_pred2)):
 report = classification_report(y_test, y_pred1)
 conf_matrix = confusion_matrix(y_test, y_pred1)
 
-global_error = calculate_global_error(y_test, y_pred1)
-individual_error_list, individual_correct_list, correct = calculate_individual_error(y_test, y_pred1, types_list)
+
+individual_correct_list, correct = calculate_individual_error(y_test, y_pred1, types_list)
+test_logs(report, conf_matrix, "svm_testing_logs.txt")
+result_logs(y_test, y_pred1, individual_correct_list, correct, "svm_testing_results.txt")
 
 
-file1 = "testing_logs.txt"
-file2 = "testing_results.txt"
-test_logs(global_error, individual_error_list, report, conf_matrix, file1)
-result_logs(y_test, y_pred1, individual_correct_list, correct, file2)
-
-global_error1 = calculate_global_error(y_test, y_pred_bin)
-individual_error_list1, individual_correct_list1, correct1 = calculate_individual_error(y_test, y_pred_bin, types_list)
-file3 = "testing_logs1.txt"
-file4 = "testing_results1.txt"
-test_logs(global_error1, individual_error_list1, report, conf_matrix, file3)
-result_logs(y_test, y_pred_bin, individual_correct_list1, correct1, file4)
+individual_correct_list1, correct1 = calculate_individual_error(y_test, y_pred_bin, types_list)
+test_logs(report, conf_matrix, "mlp_testing_logs.txt")
+result_logs(y_test, y_pred_bin, individual_correct_list1, correct1, "mlp_testing_results.txt")

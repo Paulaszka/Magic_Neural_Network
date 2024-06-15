@@ -1,0 +1,15 @@
+WIELKOSCI Z CZESCI TESTOWEJ
+
+Raport
+              precision    recall  f1-score   support
+
+           0       0.84      0.83      0.83      3679
+           1       0.69      0.71      0.70      2027
+
+    accuracy                           0.79      5706
+   macro avg       0.77      0.77      0.77      5706
+weighted avg       0.79      0.79      0.79      5706
+
+Macierz pomylek
+[[3040  639]
+ [ 580 1447]]

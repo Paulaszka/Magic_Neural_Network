@@ -7,39 +7,32 @@ df = pd.read_csv('magic04.data')
 mapping = {'g': 0, 'h': 1}
 df = df.replace(mapping).infer_objects(copy=False)
 
-train, valid, test = np.split(df.sample(frac=1), [int(0.6 * len(df)), int(0.8 * len(df))])
+train, test = np.split(df.sample(frac=1), [int(0.7 * len(df))])
 
 train, x_train, y_train = oversample_set(train, True)
-valid, x_valid, y_valid = oversample_set(valid)
 test, x_test, y_test = oversample_set(test)
 
 # - - - SVM - - -
 
-svm_model = SVC()
+svm_model = SVC(kernel='linear')
 svm_model = svm_model.fit(x_train, y_train)
 
 y_pred1 = svm_model.predict(x_test)
 
-
-print(classification_report(y_test, y_pred1))
-
 # - - - NEURAL NETWORK - - -
 
 nn_model = tf.keras.Sequential([
-    tf.keras.layers.Dense(32, activation='relu'),
-    tf.keras.layers.Dense(32, activation='relu'),
+    tf.keras.layers.Dense(10, activation='relu'),
+    tf.keras.layers.Dense(10, activation='relu'),
     tf.keras.layers.Dense(1, activation='sigmoid')
 ])
 
-nn_model.compile(optimizer=tf.keras.optimizers.Adam(0.001), loss='binary_crossentropy', metrics=['accuracy'])
+nn_model.compile(optimizer=tf.keras.optimizers.Adam(), loss='binary_crossentropy', metrics=['accuracy'])
 
-history = nn_model.fit(x_train, y_train, epochs=100, batch_size=32, validation_split=0.2, verbose=0)
+history = nn_model.fit(x_train, y_train, epochs=1000, verbose=1)
 
 y_pred2 = nn_model.predict(x_test)
 
-# print(classification_report(y_test, y_pred2))
-
-plot_accuracy(history)
 plot_loss(history)
 
 types_list = []

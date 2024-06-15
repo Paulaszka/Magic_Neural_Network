@@ -10,17 +10,6 @@ from keras.src.utils import to_categorical
 from sklearn.metrics import *
 
 
-def prepare_data(file_path):
-    cols = ["sepal length", "sepal width", "petal length", "petal width", "iris type"]
-    data_file = pd.read_csv(file_path, names=cols, header=None)
-    for wiersz in data_file:
-        ostatnia_wartosc = wiersz[-1]
-        print(ostatnia_wartosc)
-    mapping = {'Iris-setosa': 0, 'Iris-versicolor': 1, 'Iris-virginica': 2}
-    data_file['iris type'] = data_file['iris type'].replace(mapping).infer_objects(copy=False)
-    return data_file
-
-
 def oversample_set(data_set, oversample=False):
     x = data_set[data_set.columns[:-1]].values
     y = data_set[data_set.columns[-1]].values
@@ -38,21 +27,13 @@ def oversample_set(data_set, oversample=False):
 
 def plot_loss(history):
     plt.plot(history.history['loss'], label='loss')
-    plt.plot(history.history['val_loss'], label='val_loss')
+    # plt.plot(history.history['val_loss'], label='val_loss')
     plt.xlabel('Epoch')
     plt.ylabel('Binary crossentropy')
     plt.legend()
     plt.grid()
-    plt.show()
-
-
-def plot_accuracy(history):
-    plt.plot(history.history['accuracy'], label='accuracy')
-    plt.plot(history.history['val_accuracy'], label='val_accuracy')
-    plt.xlabel('Epoch')
-    plt.ylabel('Accuracy')
-    plt.legend()
-    plt.grid()
+    plt.xlim(left=0)
+    plt.ylim(bottom=0)
     plt.show()
 
 
@@ -125,3 +106,4 @@ def result_logs(y_test, y_pred, indiv_correct, correct, filename):
         plik.write("Wyniki testowe - Wyniki przewidywane\n")
         for test, pred in zip(y_test, y_pred):
             plik.write(f"{test} - {pred}\n")
+

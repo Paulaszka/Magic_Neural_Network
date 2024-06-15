@@ -27,9 +27,9 @@ nn_model = tf.keras.Sequential([
     tf.keras.layers.Dense(1, activation='sigmoid')
 ])
 
-nn_model.compile(optimizer=tf.keras.optimizers.Adam(), loss='binary_crossentropy', metrics=['accuracy'])
+nn_model.compile(optimizer=tf.keras.optimizers.Adam(learning_rate=0.01), loss='binary_crossentropy', metrics=['accuracy'])
 
-history = nn_model.fit(x_train, y_train, epochs=1000, verbose=1)
+history = nn_model.fit(x_train, y_train, epochs=700, batch_size=951, verbose=1)
 
 y_pred2 = nn_model.predict(x_test)
 

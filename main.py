@@ -12,7 +12,6 @@ mapping = {'g': 0, 'h': 1}
 data = data.replace(mapping).infer_objects(copy=False)
 
 # caly zbior danych liczy 19020 instancji, czesc treningowa 13314, a czesc testowa 5706
-
 train, test = np.split(data.sample(frac=1), [int(0.7 * len(data))])
 
 train, x_train, y_train = oversample_set(train, True)
@@ -40,7 +39,7 @@ history = nn_model.fit(x_train, y_train, epochs=600, batch_size=951, verbose=1)
 
 y_pred2 = nn_model.predict(x_test)
 
-# plot_loss(history)
+plot_loss(history)
 
 # - - - RAPORT CALCULATIONS - - -
 

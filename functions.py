@@ -23,7 +23,6 @@ def oversample_set(data_set, oversample=False):
 
 # - - - LOGGER FUNCTIONS - - -
 
-
 def calculate_individual_error(y_test, y_pred_bin, types_list):
     individual_error_list = [0] * len(types_list)
     individual_correct_list = [0] * len(types_list)
@@ -76,7 +75,6 @@ def result_logs(y_test, y_pred, indiv_correct, correct, filename):
 
 def plot_loss(history):
     plt.plot(history.history['loss'], label='loss')
-    # plt.plot(history.history['val_loss'], label='val_loss')
     plt.xlabel('Epoch')
     plt.ylabel('Binary crossentropy')
     plt.legend()
